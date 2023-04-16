@@ -14,14 +14,22 @@ class Transormacje_współrzędnych :
                            'Krasowski': [ 6378245, 0.00669342162297]}
     
     
+    def odczyt_txt(txt):
+        with open(txt,'r') as txt:
+            wiersze = txt.readlines()
+            wsp = []
+            for linijka in wiersze:
+                dane = linijka.split()
+                a = [float(i) for i in dane]
+                a[0] = int(a[0])
+                wsp.append(a)
+        return(wsp)
 
     
-
-    
-    def XYZ2BLH(self,plik_odczyt,elipsoida) :
+    def XYZ2BLH(self,txt,elipsoida) :
         a = self.elipsoida[elipsoida][0]
         e2 = self.elipsoida[elipsoida][1]
-        poczat_dane = self.Odczyt_pliku(plik_odczyt)
+        poczat_dane = self.odczyt_txt(txt)
         ost_dane = []
         for element in poczat_dane:
             Pkt,X,Y,Z = element
@@ -57,4 +65,8 @@ class Transormacje_współrzędnych :
             Ls = round(Ls,5)
             L = (Ld,Lm,Ls)
             ost_dane.append([Pkt,B,L,H])
-        
+        with open('Raport_transformacja_XYZ2BLH.txt', 'w') as plik:
+            plik.write('{:^10s} {:^20s} {:^20s} {:^20s}\n'.format('Punkt','B','L','H'))
+            for element in ost_dane:
+                plik.write('{:^10} {:^20.5f} {:^20.5f} {:^20.3f}\n'.format(a[0], a[1], a[2], a[3]))
+        return (ost_dane)
