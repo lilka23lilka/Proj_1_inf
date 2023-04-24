@@ -65,8 +65,44 @@ class Transormacje_współrzędnych :
             Ls = round(Ls,5)
             L = (Ld,Lm,Ls)
             ost_dane.append([Pkt,B,L,H])
+            #raport
         with open('Raport_transformacja_XYZ2BLH.txt', 'w') as plik:
-            plik.write('{:^10s} {:^20s} {:^20s} {:^20s}\n'.format('Punkt','B','L','H'))
-            for element in ost_dane:
-                plik.write('{:^10} {:^20.5f} {:^20.5f} {:^20.3f}\n'.format(a[0], a[1], a[2], a[3]))
+            plik.write('Otrzymane wspolrzedne geodezyjne - transformacja XYZ -> BLH \n')
+            plik.write('{:^10s} {:^20s} {:^20s} {:^20s}\n'.format('Punkt','B ','L','H [m]'))
+            for el in ost_dane:
+                plik.write('{:^10d} {:^20.5f} {:^20.5f} {:^20.3f}\n'.format(el[0], el[1], el[2], el[3]))
         return (ost_dane)
+    
+    
+        def BLH2XYZ(self,txt,elipsoida):
+               a = self.elipsoida[elipsoida][0]
+               e2 = self.elipsoida[elipsoida][1]
+               poczat_dane = self.odczyt_txt(txt)
+               ost_dane = []
+               for element in poczat_dane:
+                   Pkt,B,L,H = element
+                   N = a / np.sqrt(1- e2 * np.sin(B)**2)
+                   B = B * pi / 180
+                   L = L * pi / 180
+                   #uzyskanie XYZ i zaokraglenie
+                   X = (N + H) * np.cos(B) * np.cos(L)
+                   X=round(X,3)
+                   Y = (N + H) * np.cos(B) * np.sin(L)
+                   Y = round(Y,3)
+                   Z = (N * (1 - e2) + H) * np.sin(B)
+                   Z = round(Z,3)
+                   ost_dane.append([Nr_pkt,X,Y,Z])
+                   #raport
+               with open('Raport_transformacja_BLH2XYZ.txt', 'w') as plik:
+                   plik.write('Otrzymane wspolrzedne kartzejanskie - transformacja BLH -> XYZ \n')
+                   plik.write('{:^10s} {:^20s} {:^20s} {:^20s}\n'.format('Pkt','X [m]','Y [m]','Z [m]'))
+                   for el in ost_dane:
+                       plik.write('{:^10d} {:^20.3f} {:^20.3f} {:^20.3f}\n'.format(el[0], el[1], el[2], el[3]))
+               return(ost_dane)
+           
+            
+           #miejsce na neu
+           
+           
+    
+    
