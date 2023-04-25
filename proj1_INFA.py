@@ -103,7 +103,35 @@ class Transormacje_współrzędnych :
            return(ost_dane)      
            
             
-           #miejsce na neu
+    def XYZ2neu(self,txt,elipsoida):
+        a = self.elipsoida[elipsoida][0]
+        e2 = self.elipsoida[elipsoida][1]
+        wsp = odczyt_txt(txt)
+        wek_neu = []
+        for a in wsp:
+            nr,xp,yp,zp,xp,yp,zp = a
+            p =np.sqrt(xp ** 2 + yp **2)
+            B =np.arctan(zp /( p * (1 - e2)))
+            while True:
+                N =a / np.sqrt(1- e2 * np.sin(B)**2)
+                h = (p / np.cos(B)) - N
+                Bw = B
+                B = np.arctan( zp / (p * (1 - e2 * (N / (N + h)))))
+                if np.abs(Bw - B) < (  0.000001/206265):
+                    brak
+            L =np.arctan2(yp,xp)
+            R = np.array([[-np.sin(B)*np.cos(L), -np.sin(L), np.cos(B)*np.cos(L)],
+                          [-np.sin(B)*np.sin(L),  np.cos(L), np.cos(B)*np.sin(L)],
+                          [np.cos(B),                   0,             np.sin(B)]])
+            
+            XYZ = np.array([[xk-xp],[yk-yp],[zk-zp]])
+            neu = R.T @ XYZ
+            b = [nr,neu[0][0], neu[1][0],neu[2][0]]
+            wek_neu.append(b)
+        with open('xyz_to_neu.txt','w') as plik:
+            for c in wek_neu:
+                plik.write('{:10} {:15.3f} {:15.3f} {:15.3f}\n'.format(c[0], c[1], c[2], c[3]))
+        return (wek_neu)
            
            
     def BL2XY2000(self,txt,elipsoida):
@@ -160,4 +188,36 @@ class Transormacje_współrzędnych :
                    plik.write('{:^10d} {:^20.3f} {:^20.3f}\n'.format(el[0], el[1], el[2]))
            return(ost_dane)             
     
-    
+    def BL21992(self,txt,elipsoida):
+        a = self.elipsoida[elipsoida][0]
+        e2 = self.elipsoida[elipsoida][1]
+        wsp = odczyt_txt(txt)
+        wsp_92 = []
+        for a in wsp:
+            nr, B, L = a
+            Brad = B * pi/180
+            Lrad = L* pi/180
+            lam0 = 19* pi/180
+            b2 = (a**2) * (1-e2)
+            ep2 = (a**2-b2)/b2
+            dL = L - lam0
+            t = tan(B)
+            n2 = ep2 * (cos(fi)**2)
+            N = a / np.sqrt(1- e2 * np.sin(B)**2)
+            #
+            A0 = 1 - (e2 / 4) - ((3 * e2 ** 2)/ 64) - ((5 * e2 ** 3) / 256)
+            A2 = (3 / 8) *(e2 + (e2 ** 2) / 4 + (15 * e2**3) /128)
+            A4 = (15 / 256)*(e2 ** 2 + (3 * e2 **3) / 4)
+            A6 = (35 * e2 ** 3) / 3072
+            sigma = a * ((A0 * B) - (A2 * sin(2 *B)) + (A4* sin(4 * B)) - (A6 * sin(6 * B)))
+            #
+            xgk = sigma + ((dL **2 / 2) * N * sin(B) * cos(B) * (1+ (((dL**2)/12) *(cos(B) ** 2) * (5 - t **2 + 9 * n2 + 4 * n2 ** 2)) + (((dL ** 4) / 360) * (cos(B)**4) * (61 - 58 * (t ** 2) + t ** 4 + 270 * n2 - 330 * n2 * (t ** 2)))))
+            ygk = dl * N * cos(B) * (1 + (((dL**2)/6) * (cos(B) ** 2) * (1 - t ** 2 + n2)) + (((dL ** 4 ) / 120) * (cos(B) ** 4) * (5 - 18 * t ** 2 + t ** 4 + 14 * n2 - 58 * n2 * t ** 2)))   
+            m = 0.9993 
+            x92 = xgk * m - 5300000
+            y92 = ygk * m +500000
+            b = [nr,x92,y92]
+            wsp_92.append(b)
+        with open('BL_to_1992','w') as plik:
+            for c in wsp_92:
+                plik.write('{:10} {:15.3f} {:15.3f}\n'.format(c[0],c[1],c[2]))    
