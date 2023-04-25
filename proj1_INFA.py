@@ -9,13 +9,13 @@ from math import *
 
 class Transormacje_współrzędnych :
     
-    def __init__(self,elipsoida):
-        self.elipsoida = {'GRS80':[ 6378137, 0.00669438002290],
+    def __init__(self):
+        self.elipsoidy = {'GRS80':[ 6378137, 0.00669438002290],
                            'WGS84': [ 6378137,  0.00669437999014],
                            'Krasowski': [ 6378245, 0.00669342162297]}
     
     
-    def odczyt_txt(txt):
+    def odczyt_txt(self, txt):
         with open(txt,'r') as txt:
             wiersze = txt.readlines()
             wsp = []
@@ -28,8 +28,8 @@ class Transormacje_współrzędnych :
 
     
     def XYZ2BLH(self,txt,elipsoida) :
-        a = self.elipsoida[elipsoida][0]
-        e2 = self.elipsoida[elipsoida][1]
+        a = self.elipsoidy[elipsoida][0]
+        e2 = self.elipsoidy[elipsoida][1]
         poczat_dane = self.odczyt_txt(txt)
         ost_dane = []
         for element in poczat_dane:
@@ -71,14 +71,14 @@ class Transormacje_współrzędnych :
             plik.write('Otrzymane wspolrzedne geodezyjne - transformacja XYZ -> BLH \n')
             plik.write('{:^10s} {:^20s} {:^20s} {:^20s}\n'.format('Punkt','B ','L','H [m]'))
             for el in ost_dane:
-                plik.write('{:^10d} {:^20.5f} {:^20.5f} {:^20.3f}\n'.format(el[0], el[1], el[2], el[3]))
+                plik.write('{:^10d} {:^20r} {:^20r} {:^20.3f}\n'.format(el[0], el[1], el[2], el[3]))
         return (ost_dane)
     
     
     
     def BLH2XYZ(self,txt,elipsoida):
-           a = self.elipsoida[elipsoida][0]
-           e2 = self.elipsoida[elipsoida][1]
+           a = self.elipsoidy[elipsoida][0]
+           e2 = self.elipsoidy[elipsoida][1]
            poczat_dane = self.odczyt_txt(txt)
            ost_dane = []
            for element in poczat_dane:
@@ -93,7 +93,7 @@ class Transormacje_współrzędnych :
                Y = round(Y,3)
                Z = (N * (1 - e2) + H) * np.sin(B)
                Z = round(Z,3)
-               ost_dane.append([Nr_pkt,X,Y,Z])
+               ost_dane.append([Pkt,X,Y,Z])
                #raport
            with open('Raport_transformacja_BLH2XYZ.txt', 'w') as plik:
                plik.write('Otrzymane wspolrzedne kartzejanskie - transformacja BLH -> XYZ \n')
@@ -191,7 +191,7 @@ class Transormacje_współrzędnych :
     def BL21992(self,txt,elipsoida):
         a = self.elipsoida[elipsoida][0]
         e2 = self.elipsoida[elipsoida][1]
-        wsp = odczyt_txt(txt)
+        wsp = self.odczyt_txt(txt)
         wsp_92 = []
         for a in wsp:
             nr, B, L = a
@@ -220,4 +220,7 @@ class Transormacje_współrzędnych :
             wsp_92.append(b)
         with open('BL_to_1992','w') as plik:
             for c in wsp_92:
-                plik.write('{:10} {:15.3f} {:15.3f}\n'.format(c[0],c[1],c[2]))    
+                plik.write('{:10} {:15.3f} {:15.3f}\n'.format(c[0],c[1],c[2]))   
+        return(wsp_92)  
+
+            
