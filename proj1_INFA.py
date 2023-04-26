@@ -6,8 +6,9 @@ Created on Sun Apr 16 17:05:32 2023
 """
 import numpy as np
 from math import *
+from argparse import ArgumentParser
 
-class Transormacje_współrzędnych :
+class Transformacje_wspolrzednych :
     
     def __init__(self):
         self.elipsoidy = {'GRS80':[ 6378137, 0.00669438002290],
@@ -32,6 +33,7 @@ class Transormacje_współrzędnych :
         e2 = self.elipsoidy[elipsoida][1]
         poczat_dane = self.odczyt_txt(txt)
         ost_dane = []
+        dane_raport=[]
         for element in poczat_dane:
             Pkt,X,Y,Z = element
             #zmienna do obliczen
@@ -66,12 +68,13 @@ class Transormacje_współrzędnych :
             Ls = round(Ls,5)
             L = (Ld,Lm,Ls)
             ost_dane.append([Pkt,B,L,H])
+            dane_raport.append([Pkt,Bd,Bm,Bs,Ld,Lm,Ls,H])
             #raport
         with open('Raport_transformacja_XYZ2BLH.txt', 'w') as plik:
             plik.write('Otrzymane wspolrzedne geodezyjne - transformacja XYZ -> BLH \n')
-            plik.write('{:^10s} {:^20s} {:^20s} {:^20s}\n'.format('Punkt','B ','L','H [m]'))
-            for el in ost_dane:
-                plik.write('{:^10d} {:^20r} {:^20r} {:^20.3f}\n'.format(el[0], el[1], el[2], el[3]))
+            plik.write('{:^10s} {:^20s} {:^20s} {:^20s} {:^20s} {:^20s} {:^20s} {:^20s} \n'.format('Punkt','B [stop] ','B [min]','B [sek]', 'L [stop]','L [min]', 'L [sek]','H [m]'))
+            for el in dane_raport:
+                plik.write('{:^10d} {:^20d} {:^20d} {:^20.5f} {:^20d} {:^20d} {:^20.5f} {:^20.3f}\n'.format(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7]))
         return (ost_dane)
     
     
@@ -104,8 +107,8 @@ class Transormacje_współrzędnych :
            
             
     def XYZ2neu(self,txt,elipsoida):
-        a = self.elipsoida[elipsoida][0]
-        e2 = self.elipsoida[elipsoida][1]
+        a = self.elipsoidy[elipsoida][0]
+        e2 = self.elipsoidy[elipsoida][1]
         wsp = odczyt_txt(txt)
         wek_neu = []
         for a in wsp:
@@ -135,8 +138,8 @@ class Transormacje_współrzędnych :
            
            
     def BL2XY2000(self,txt,elipsoida):
-           a = self.elipsoida[elipsoida][0]
-           e2 = self.elipsoida[elipsoida][1]
+           a = self.elipsoidy[elipsoida][0]
+           e2 = self.elipsoidy[elipsoida][1]
            poczat_dane = self.odczyt_txt(txt)
            ost_dane = []
            for element in poczat_dane:
@@ -189,8 +192,8 @@ class Transormacje_współrzędnych :
            return(ost_dane)             
     
     def BL21992(self,txt,elipsoida):
-        a = self.elipsoida[elipsoida][0]
-        e2 = self.elipsoida[elipsoida][1]
+        a = self.elipsoidy[elipsoida][0]
+        e2 = self.elipsoidy[elipsoida][1]
         wsp = self.odczyt_txt(txt)
         wsp_92 = []
         for a in wsp:
