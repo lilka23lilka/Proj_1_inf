@@ -254,13 +254,13 @@ class Transformacje_wspolrzednych :
         return(wsp_92) 
 
 if __name__ == '__main__':
-    transformacje = {'XYZ2BLH':'XYZ2BLH', 'BLH2XYZ':'BLH2XYZ', 'XYZ2NEU':'XYZ2NEU', 'BL22000':'BL22000', 'BL21992':'BL21992'}
-    elipsoidy = {'KRASOWSKI':'KRASOWSKI' , 'GRS80':'GRS80' , 'WGS84':'WGS84'}
     parser = ArgumentParser(description='Obliczanie wspolrzednych')
     parser.add_argument('-p', type=str, help='Podaj nazwę pliku z danymi z rozszerzeniem. Jes;o plik znajduje sie w innym folderze nalezy podac jego sciezke.')
     parser.add_argument('-t', type=str, help='Precyzuje nazwe wybranego typu transformacji (XYZ2BLH, BLH2XYZ, XYZ2NEU, BL22000, BL21992)')
     parser.add_argument('-e', type=str, help='Precyzuje nazwe modelu elipsoidy (WGS84/ GRS80/ KRASOWSKI)')
     args = parser.parse_args()
+    transformacje = {'XYZ2BLH':'XYZ2BLH', 'BLH2XYZ':'BLH2XYZ', 'XYZ2NEU':'XYZ2NEU', 'BL22000':'BL22000', 'BL21992':'BL21992'}
+    elipsoidy = {'KRASOWSKI':'KRASOWSKI' , 'GRS80':'GRS80' , 'WGS84':'WGS84'}
     KONTYNUUJ = "KONTYNUUJ"
     try:
         while KONTYNUUJ == "KONTYNUUJ" :
