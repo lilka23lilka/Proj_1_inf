@@ -9,7 +9,7 @@ Zawiera on cztery przekształcenia wspolrzednych:
 - XYZ2BLH -> jest to transformacja obejmująca przekształcenie współrzędnych ortokartograficznych na układ współrzędnych geodezyjnych. Powszechnie nazwyna Algorytmem Hirvonena. Początkowymi danymi są X,Y,Z podanego punktu. Następnie poprzez obliczenia uzyskujemy ostetcznie szerokości gedozyjnej (fi), długości geodezyjnej (lambda), a także wysokości. Otrzymane wartości zostaną zapisane do nowo utworzonego pliku o rozszerzeniu txt. Uzyskane dane bedą przedstawione w odpowiednich jednostkach: fi i lamda w stopniach dziesietnych, natomiast wysokość w metrach. 
 - BLH2XYZ -> jest do przekształcenie odwrotne do powyższego Algorytmu Hirvonena. Podając szrokość, długość geodezyjną w stopniach dziesiętnych oraz wysokość w metrach otrzymamy X,Y,Z w metrach. 
 - XYZ2neu -> przekształca współrzędne XYZ na wektor przestrzenny neu
-- BL21992 -> przekształca współrzędne geodezyjne na współrzędne X,Y w układzie 2000. Dane początkowe oraz końcowe powinny byc w metrach
+- BL21992 -> przekształca współrzędne geodezyjne na współrzędne X,Y w układzie 1992. Dane początkowe oraz końcowe powinny byc w metrach
 - BL22000 -> polega na przekształceniu współrzędnych geodezyjnych na współrzędne X,Y w układzie 2000. Zarówno dane początkowe jak i końcowe powinny być w jednostce jaką jest metr.
 
 3) Na jakich modelach elipsoid program umożliwia obliczenia?
