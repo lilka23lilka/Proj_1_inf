@@ -223,8 +223,8 @@ class Transformacje_wspolrzednych :
         e2 = self.elipsoidy[elipsoida][1]
         wsp = self.odczyt_txt(txt)
         wsp_92 = []
-        for a in wsp:
-            nr, B, L = a
+        for el in wsp:
+            nr, B, L = el
             Brad = B * pi/180
             Lrad = L* pi/180
             lam0 = 19* pi/180
@@ -242,7 +242,7 @@ class Transformacje_wspolrzednych :
             sigma = a * ((A0 * B) - (A2 * sin(2 *B)) + (A4* sin(4 * B)) - (A6 * sin(6 * B)))
             #
             xgk = sigma + ((dL **2 / 2) * N * sin(B) * cos(B) * (1+ (((dL**2)/12) *(cos(B) ** 2) * (5 - t **2 + 9 * n2 + 4 * n2 ** 2)) + (((dL ** 4) / 360) * (cos(B)**4) * (61 - 58 * (t ** 2) + t ** 4 + 270 * n2 - 330 * n2 * (t ** 2)))))
-            ygk = dl * N * cos(B) * (1 + (((dL**2)/6) * (cos(B) ** 2) * (1 - t ** 2 + n2)) + (((dL ** 4 ) / 120) * (cos(B) ** 4) * (5 - 18 * t ** 2 + t ** 4 + 14 * n2 - 58 * n2 * t ** 2)))   
+            ygk = dL * N * cos(B) * (1 + (((dL**2)/6) * (cos(B) ** 2) * (1 - t ** 2 + n2)) + (((dL ** 4 ) / 120) * (cos(B) ** 4) * (5 - 18 * t ** 2 + t ** 4 + 14 * n2 - 58 * n2 * t ** 2)))   
             m = 0.9993 
             x92 = xgk * m - 5300000
             y92 = ygk * m +500000
@@ -250,7 +250,7 @@ class Transformacje_wspolrzednych :
             wsp_92.append(b)
         with open('BL_to_1992','w') as plik:
             for c in wsp_92:
-                plik.write('{:10} {:15.3f} {:15.3f}\n'.format(c[0],c[1],c[2]))   
+                plik.write('{:^10d} {:^15.3f} {:^15.3f}\n'.format(c[0],c[1],c[2]))   
         return(wsp_92) 
 
 if __name__ == '__main__':
