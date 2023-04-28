@@ -18,10 +18,10 @@ Zawiera on cztery przekształcenia wspolrzednych:
 - Krasowski
 
 4) Na jakim systemie program został napisany oraz jakie są wymagania sprzętowe?
--System operacyjny Windows 10,
--64 - biotwy system operacyjny
--Python 3.10 - proponowane : Spyder (3.4.5) - wymagane działanie komendy 'input'
--Biblioteki użyte w programie: Math, Numpy, Argparse
+- System operacyjny Windows 10,
+- 64 biotwy system operacyjny
+- Python 3.10 proponowane : Spyder (3.4.5) - wymagane działanie komendy 'input'
+- Biblioteki użyte w programie: Math, Numpy, Argparse
 
 5) Przykładowa transformacja XYZ2BLH:
 
