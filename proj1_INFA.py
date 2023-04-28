@@ -8,15 +8,24 @@ import numpy as np
 from math import *
 from argparse import ArgumentParser
 
-class Transformacje_wspolrzednych :
+
+class Transormacje_współrzędnych :
     
     def __init__(self):
+        '''
+        Parametry elipsoid:
+            a - duża półoś elipsoidy 
+            e^2 - mimośród^2
+        podane w postaci słownika list w formacie:
+        {'elipsoida':[a,e^2]}
+        '''
         self.elipsoidy = {'GRS80':[ 6378137, 0.00669438002290],
                            'WGS84': [ 6378137,  0.00669437999014],
                            'Krasowski': [ 6378245, 0.00669342162297]}
     
     
     def odczyt_txt(self, txt):
+    
         with open(txt,'r') as txt:
             wiersze = txt.readlines()
             wsp = []
@@ -29,6 +38,12 @@ class Transformacje_wspolrzednych :
 
     
     def XYZ2BLH(self,txt,elipsoida) :
+        '''
+        Parameters: plik tekstowy ze wspołrzędnymi  XYZ oraz parametry wybranej elipsoidy
+        działanie: przekształca współrzędne XYZ na współrzędne BLH
+        Returns: plik tekstowyze ze wspołrzędnymi  BLH
+            
+        '''
         a = self.elipsoidy[elipsoida][0]
         e2 = self.elipsoidy[elipsoida][1]
         poczat_dane = self.odczyt_txt(txt)
@@ -53,30 +68,26 @@ class Transformacje_wspolrzednych :
             L = np.arctan2(Y,X)
             #zamiana na stopnie, minuty,sekundy fi
             B = B * 180 / pi
-            Bst=B
-            Bd = int(B)
-            Bm = int(60*(B-Bd))
-            Bs = (B-Bd -Bm/60)*3600
-            Bs = round(Bs,5)
-            B=(Bd,Bm,Bs)
+            # Bst=B
+            # Bd = int(B)
+            # Bm = int(60*(B-Bd))
+            # Bs = (B-Bd -Bm/60)*3600
+            # Bs = round(Bs,5)
+            # B=(Bd,Bm,Bs)
             #zamiana na stopnie, minuty,sekundy fi
             L = L * 180 / pi
-            Lst =L
-            Ld = int(L)
-            Lm = int(60*(L-Ld))
-            Ls = (L-Ld-Lm/60)*3600
-            Ls = round(Ls,5)
-            L = (Ld,Lm,Ls)
+            # Lst =L
+            # Ld = int(L)
+            # Lm = int(60*(L-Ld))
+            # Ls = (L-Ld-Lm/60)*3600
+            # Ls = round(Ls,5)
+            # L = (Ld,Lm,Ls)
             ost_dane.append([Pkt,B,L,H])
-            dane_raport.append([Pkt,Bd,Bm,Bs,Ld,Lm,Ls,H])
             #raport
         with open('Raport_transformacja_XYZ2BLH.txt', 'w') as plik:
-            plik.write('Otrzymane wspolrzedne geodezyjne - transformacja XYZ -> BLH \n')
-            plik.write('{:^10s} {:^20s} {:^20s} {:^20s} {:^20s} {:^20s} {:^20s} {:^20s} \n'.format('Punkt','B [stop] ','B [min]','B [sek]', 'L [stop]','L [min]', 'L [sek]','H [m]'))
-            for el in dane_raport:
-                plik.write('{:^10d} {:^20d} {:^20d} {:^20.5f} {:^20d} {:^20d} {:^20.5f} {:^20.3f}\n'.format(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7]))
-        return (ost_dane)
-    
+            for el in ost_dane:
+                plik.write('{:^10d} {:^20.5f} {:^20.5f} {:^20.3f}\n'.format(el[0], el[1], el[2], el[3]))
+        return (ost_dane)    
     
     
     def BLH2XYZ(self,txt,elipsoida):
@@ -106,10 +117,10 @@ class Transformacje_wspolrzednych :
            return(ost_dane)      
            
             
-    def XYZ2neu(self,txt,elipsoida):
+    def XYZ2NEU(self,txt,elipsoida):
         a = self.elipsoidy[elipsoida][0]
         e2 = self.elipsoidy[elipsoida][1]
-        wsp = odczyt_txt(txt)
+        wsp = self.odczyt_txt(txt)
         wek_neu = []
         for a in wsp:
             nr,xp,yp,zp,xp,yp,zp = a
@@ -137,7 +148,7 @@ class Transformacje_wspolrzednych :
         return (wek_neu)
            
            
-    def BL2XY2000(self,txt,elipsoida):
+    def BL22000(self,txt,elipsoida):
            a = self.elipsoidy[elipsoida][0]
            e2 = self.elipsoidy[elipsoida][1]
            poczat_dane = self.odczyt_txt(txt)
@@ -224,6 +235,51 @@ class Transformacje_wspolrzednych :
         with open('BL_to_1992','w') as plik:
             for c in wsp_92:
                 plik.write('{:10} {:15.3f} {:15.3f}\n'.format(c[0],c[1],c[2]))   
-        return(wsp_92)  
+        return(wsp_92) 
 
-            
+if __name__ == '__main__':
+    transformacje = {'XYZ2BLH':'XYZ2BLH', 'BLH2XYZ':'BLH2XYZ', 'XYZ2NEU':'XYZ2NEU', 'BL2XY2000':'BL2XY2000', 'BL2XY1992':'BL2XY1992'}
+    elipsoidy = {'KRASOWSKI':'KRASOWSKI' , 'GRS80':'GRS80' , 'WGS84':'WGS84'}
+    parser = ArgumentParser(description='Obliczanie wspolrzednych')
+    parser.add_argument('-p', type=str, help='Podaj nazwę pliku z danymi z rozszerzeniem. Jes;o plik znajduje sie w innym folderze nalezy podac jego sciezke.')
+    parser.add_argument('-t', type=str, help='Precyzuje nazwe wybranego typu transformacji (XYZ2BLH, BLH2XYZ, XYZ2NEU, BL2XY2000, BL2XY1992)')
+    parser.add_argument('-e', type=str, help='Precyzuje nazwe modelu elipsoidy (WGS84/ GRS80/ KRASOWSKI)')
+    args = parser.parse_args()
+    KONTYNUUJ = "KONTYNUUJ"
+    try:
+        while KONTYNUUJ == "KONTYNUUJ" :
+            if args.p==None:
+                args.p = input(str('Wklej sciezke do pliku txt z danymi: '))
+            if args.t==None:
+                args.t = input(str('Nazwa transformacji:')).upper()
+            if args.e==None:
+                args.e = input(str('Model elipsoidy:')).upper()
+            klasa = Transformacje_wspolrzednych()
+            trans = transformacje[args.t]
+            elip = elipsoidy[args.e]
+            #dopasowanie argumentu z input'u do odpowiedniej transformacji z podanymi argumentami odnosnie pliku i elipsoidy
+            if trans == 'XYZ2BLH':
+                poczat_dane = klasa.XYZ2BLH(args.p, elip)
+            if trans == 'BLH2XYZ':
+                poczat_dane = klasa.BLH2XYZ(args.p, elip)
+            if trans == 'XYZ2NEU':
+                poczat_dane = klasa.XYZ2NEU(args.p, elip)
+            if trans == 'BL22000':
+                poczat_dane = klasa.BL22000(args.p, elip)
+            if trans == 'BL21992':
+                poczat_dane = klasa.BL21992(args.p, elip)
+            KONTYNUUJ = input(str("Aby kontynuowac program wpisz KONTYNUUJ  - w przeciwnym przypadku program zakonczy dzialanie : ")).upper()
+            args.e = None
+            args.p= None
+            args.t= None      
+    # błedy
+    except FileNotFoundError:
+        print('PODANY PLIK NIE ISTNIEJE.')
+    except KeyError:
+        print('WSPISANE PARAMETRY SĄ NIEPRAWIDŁOWE .')
+    except IndexError:
+        print('NIEPOPRAWNY FORMAT DANYCH W PLIKU.')
+    except ValueError:
+        print('NIEPOPRAWNY FORMAT DANYCH W PLIKU.')
+    finally:
+        print('PROGRAM ZAKOŃCZYŁ PRACĘ.')            
