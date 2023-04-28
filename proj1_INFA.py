@@ -9,7 +9,7 @@ from math import *
 from argparse import ArgumentParser
 
 
-class Transormacje_współrzędnych :
+class Transformacje_wspolrzednych :
     
     def __init__(self):
         '''
@@ -21,7 +21,7 @@ class Transormacje_współrzędnych :
         '''
         self.elipsoidy = {'GRS80':[ 6378137, 0.00669438002290],
                            'WGS84': [ 6378137,  0.00669437999014],
-                           'Krasowski': [ 6378245, 0.00669342162297]}
+                           'KRASOWSKI': [ 6378245, 0.00669342162297]}
     
     
     def odczyt_txt(self, txt):
