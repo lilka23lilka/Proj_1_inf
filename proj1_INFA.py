@@ -25,7 +25,6 @@ class Transormacje_współrzędnych :
     
     
     def odczyt_txt(self, txt):
-    
         with open(txt,'r') as txt:
             wiersze = txt.readlines()
             wsp = []
@@ -35,7 +34,6 @@ class Transormacje_współrzędnych :
                 a[0] = int(a[0])
                 wsp.append(a)
         return(wsp)
-
     
     def XYZ2BLH(self,txt,elipsoida) :
         '''
@@ -123,7 +121,7 @@ class Transormacje_współrzędnych :
         wsp = self.odczyt_txt(txt)
         wek_neu = []
         for a in wsp:
-            nr,xp,yp,zp,xp,yp,zp = a
+            nr,xp,yp,zp,xk,yk,zk = a
             p =np.sqrt(xp ** 2 + yp **2)
             B =np.arctan(zp /( p * (1 - e2)))
             while True:
@@ -132,7 +130,7 @@ class Transormacje_współrzędnych :
                 Bw = B
                 B = np.arctan( zp / (p * (1 - e2 * (N / (N + h)))))
                 if np.abs(Bw - B) < (  0.000001/206265):
-                    brak
+                    break
             L =np.arctan2(yp,xp)
             R = np.array([[-np.sin(B)*np.cos(L), -np.sin(L), np.cos(B)*np.cos(L)],
                           [-np.sin(B)*np.sin(L),  np.cos(L), np.cos(B)*np.sin(L)],
@@ -216,7 +214,7 @@ class Transormacje_współrzędnych :
             ep2 = (a**2-b2)/b2
             dL = L - lam0
             t = tan(B)
-            n2 = ep2 * (cos(fi)**2)
+            n2 = ep2 * (cos(B)**2)
             N = a / np.sqrt(1- e2 * np.sin(B)**2)
             #
             A0 = 1 - (e2 / 4) - ((3 * e2 ** 2)/ 64) - ((5 * e2 ** 3) / 256)
