@@ -282,7 +282,7 @@ if __name__ == '__main__':
                 poczat_dane = klasa.BL22000(args.p, elip)
             if trans == 'BL21992':
                 poczat_dane = klasa.BL21992(args.p, elip)
-            KONTYNUUJ = input(str("Aby kontynuowac program wpisz KONTYNUUJ  - w przeciwnym przypadku program zakonczy dzialanie : ")).upper()
+            KONTYNUUJ = input(str("Aby uruchomić program ponownie wpisz KONTYNUUJ  - w przeciwnym przypadku program zakonczy dzialanie : ")).upper()
             args.e = None
             args.p= None
             args.t= None      
