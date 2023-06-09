@@ -21,7 +21,7 @@ Zawiera on cztery przekształcenia wspolrzednych:
 3) Na jakich modelach elipsoid program umożliwia obliczenia?
 - GRS80
 - WGS84
-
+- krasowski ( nie działa poprawnie )
 
 4) Na jakim systemie program został napisany oraz jakie są wymagania sprzętowe?
 - System operacyjny Windows 10,
@@ -48,9 +48,9 @@ Odpowiedzieć na podane komendy:
 - podać nazwę elipsoidy, dla której mają byc wykonane obliczenia,
 
 Przykładowe wywołanie:
-- Dane.txt
-- XYZ2BLH
-- Krasowski
+- Dane.txt -p
+- XYZ2BLH -t
+- Krasowski -e
 
 Po uruchomieniu programu zostanie utworzony raport z transformowanymi współrzędnymi
 przykład otrzymanych wspolrzednych geodezyjnych - transformacja XYZ -> BLH :
@@ -64,6 +64,9 @@ przykład otrzymanych wspolrzednych geodezyjnych - transformacja XYZ -> BLH :
 ```
 Po wpisaniu 'KONTYNUUJ', program zostanie ponownie uruchomiony w pętli gotowy do ponownych obliczeń. w przeciwnym przypadku zakonczy on dzialanie.
 
+Raport wynikowy zostanie zapisany w tym samej lokalizacji, gdzie znajduje się plik proj1_INFA.py, który umożliwia transformacje.
+Plik zostanie zapisany pod nazwą 'Raport_transformacja_(nazwa transformacji).txt'.
+
 6) Błedy
 po wpisaniu błędnych parametrów wyświetlany jest następujący komunikat:
   PODANY PLIK NIE ISTNIEJE.
@@ -71,6 +74,11 @@ po wpisaniu błędnych parametrów wyświetlany jest następujący komunikat:
 po podaniu pliku z niepoprawnym formatem danych  wyświetlany jest następujący komunikat:  
   NIEPOPRAWNY FORMAT DANYCH W PLIKU.
   
-Program nie poprawnie wykonuję przej
+!!! Program nie poprawnie wykonuję transformacje z elipsoidy Krasowskiego dlatego nie powinno się z niej korzystać !!!
   
 wszelkie inne błędy na chwilę obecną nie zostały wykryte 
+
+
+
+
+
