@@ -148,7 +148,7 @@ class Transformacje_wspolrzednych :
             neu = R.T @ XYZ
             b = [nr,neu[0][0], neu[1][0],neu[2][0]]
             wek_neu.append(b)
-        with open('xyz_to_neu.txt','w') as plik:
+        with open('Raport_transformacja_XYZ2neu.txt','w') as plik:
             for c in wek_neu:
                 plik.write('{:10} {:15.3f} {:15.3f} {:15.3f}\n'.format(c[0], c[1], c[2], c[3]))
         return (wek_neu)
